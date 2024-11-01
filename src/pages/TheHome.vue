@@ -1,63 +1,49 @@
 <template>
-  <Form @onSubmit="handleSubmit" />
-  <List @onRemove="handleRemove" :items="notes" />
+  <h1>Все пользователи</h1>
+  <ul v-for="user in getUsersAdmin" :key="user.id">
+    <li>{{ user.id }}</li>
+    <li>{{ user.name }}</li>
+    <li>{{ user.admin ? 'Это админ' : 'Это пользователь' }}</li>
+  </ul>
+  <p>{{ getUsersLength }}</p>
+  <br>
+  <br>
+  <form>
+    <p>Введите id пользователя</p>
+    <input v-model="userId" type="number">
+</form>
+  <p>{{ getUsersById}}</p>
+  <div v-if="getUsersById.id">
+    <p>{{ getUsersById.name}}</p>
+    <p>{{ getUsersById.admin ? 'Это админ' : 'Это пользователь'}}</p>
+  </div>
 </template>
 
 <script>
-import Form from '@/components/Notes/NotesForm';
-import List from '@/components/Notes/NotesList';
-
 export default {
-  data() {
+  data () {
     return {
-      notes: [
-        {
-          title: 'Закончить курс',
-          tags: ['work', 'home']
-        },
-        {
-          title: 'Выполнить ДЗ',
-          tags: ['home']
-        },
-        {
-          title: 'Уйти в отпуск',
-          tags: ['travel']
-        }
-      ],
-    };
-  },
-  components: {
-    Form,
-    List,
-  },
-  watch: {
-    notes: {
-    handler (upgradeList) {
-      localStorage.setItem('notes', JSON.stringify(upgradeList))
-    },
-    deep: true
+      userId: 5,
     }
   },
-  mounted () {
-    this.getNotes ();
-  },
-  methods: {
-    handleSubmit({title, activeTags}) {
-      const note = {
-        title: title,
-        tags: activeTags
-      }
-      this.notes.push(note);
+  computed: {
+    getAllUsers () {
+      return this.$store.getters.getAllUsers
     },
-    handleRemove(index) {
-      this.notes.splice(index, 1);
+    getUsersLength () {
+      return this.$store.getters.getUsersLength
     },
-    getNotes () {
-      const localNotes = localStorage.getItem('notes');
-      if (localNotes) {
-        this.notes = JSON.parse(localNotes);
-      }
+    getUsersAdmin () {
+      return this.$store.getters.getUsersAdmin
+    },
+    getUsersById () {
+      return this.$store.getters.getUsersById(this.userId) || 'Такого пользователя нет'
     }
-  },
+},
+methods: {
+},
+watch: {
+
+}
 };
 </script>
