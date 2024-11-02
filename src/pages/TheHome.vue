@@ -1,4 +1,8 @@
 <template>
+  <div v-if="!user">
+    <button @click="handlerUser" class="btn btnPrimary">Авторизоваться</button>
+  </div>
+  <div v-else>Вы вошли в аккаунт</div>
   <h1>Все пользователи</h1>
   <ul v-for="user in getUsersAdmin" :key="user.id">
     <li>{{ user.id }}</li>
@@ -27,6 +31,9 @@ export default {
     }
   },
   computed: {
+    user () {
+      return this.$store.getters.user
+    },
     getAllUsers () {
       return this.$store.getters.getAllUsers
     },
@@ -41,6 +48,9 @@ export default {
     }
 },
 methods: {
+  handlerUser () {
+    this.$store.dispatch('setUser');
+  }
 },
 watch: {
 

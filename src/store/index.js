@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 
 export const store = createStore({
     state: {
+        user: null,
         users: [
             {
                 id: 1,
@@ -21,7 +22,27 @@ export const store = createStore({
             }
         ]
     },
+    mutations: {
+        setUser (state, fakeUser) {
+            state.user = fakeUser;
+            console.log('Mutations on');
+        }
+    },
+    actions: {
+        setUser (context) {
+            console.log('Actions on');
+            const fakeUser = {
+                id: 222,
+                name: 'Fake',
+                admin: true
+            }
+            context.commit('setUser', fakeUser);
+        }
+    },
     getters: {
+        user (state) {
+            return state.user
+        },
         getAllUsers (state) {
             return state.users
         },
