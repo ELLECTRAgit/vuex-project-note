@@ -5,12 +5,15 @@
     <button @click="handlerUser" class="btn btnPrimary">Авторизоваться</button>
   </div>
   <div v-else>Вы вошли в аккаунт</div>
-  <ul v-for="note in getAllNotes" :key="note.title">
+  <!-- <div v-else>
+    <p>Пользователь {{ user.name }} вошел в аккаунт</p>
+  </div> -->
+
+  <ul v-for="note in notes" :key="note.title">
     <li>{{ note.title }}</li>
   </ul>
   <button @click="allNotes" class="btn btnPrimary">allNotes</button>
 
-  <div v-else><p>Пользователь {{ user.name }} вошел в аккаунт</p></div>
   <h1>Все пользователи</h1>
   <ul v-for="user in getUsersAdmin" :key="user.id">
     <li>{{ user.id }}</li>
@@ -45,7 +48,7 @@ export default {
     List,
   },
   computed: {
-    getAllNotes() {
+    notes() {
       return this.$store.getters.getAllNotes;
     },
     //-------------
@@ -69,15 +72,14 @@ export default {
     },
   },
   mounted() {
-    this.allNotes();
+    this.allNotes;
     //получаем Ноты из Локалсторедж при загрузке компонента
     // this.getNotes();
   },
   methods: {
-    allNotes() {
-      const allNotes = this.$store.getters.getAllNotes;
-      localStorage.setItem('allNotes', JSON.stringify(allNotes));
-      console.log(allNotes);
+    allNotes(notes) {
+      // const allNotes = this.$store.getters.getAllNotes;
+      localStorage.setItem('notes', JSON.stringify(notes));
     },
     //добавление новой Ноты в массив Нот
     handleSubmit({ title, activeTags }) {
@@ -85,7 +87,8 @@ export default {
         title: title,
         tags: activeTags,
       };
-      this.AllNotes.push(note);
+      this.$store.dispatch('setNote', note);
+      // return note;
     },
     //получаем Ноты из Локалсторедж
     // getNotes() {
@@ -101,10 +104,11 @@ export default {
   },
   watch: {
     //следим за Нотами и отправляем Ноты в Локалсторедж
-    allNotes: {
+    notes: {
       handler(upgradeList) {
-        localStorage.setItem('allNotes', JSON.stringify(upgradeList));
+        localStorage.setItem('notes', JSON.stringify(upgradeList));
       },
+      //чтобы отслеживать изменения во вложенных свойствах массива notes
       deep: true,
     },
   },

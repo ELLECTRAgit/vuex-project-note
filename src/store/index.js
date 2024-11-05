@@ -36,9 +36,9 @@ export const store = createStore({
     ],
   },
   mutations: {
-    // setNote(state, note) {
-    //   state.notes.push(note);
-    // },
+    setNote(state, note) {
+      state.notes.push(note);
+    },
     //-----------
     setUser(state, fakeUser) {
       state.user = fakeUser;
@@ -46,9 +46,9 @@ export const store = createStore({
     },
   },
   actions: {
-    // setNote(context) {
-    //   context.commit('setNote', note);
-    // },
+    setNote({commit}, note) {
+      commit('setNote', note);
+    },
     //-------------
     setUser(context) {
       console.log('Actions on');
