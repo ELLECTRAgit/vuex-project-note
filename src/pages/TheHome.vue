@@ -72,14 +72,18 @@ export default {
     },
   },
   mounted() {
-    this.allNotes;
+    this.allNotes();
     //получаем Ноты из Локалсторедж при загрузке компонента
     // this.getNotes();
   },
   methods: {
-    allNotes(notes) {
-      // const allNotes = this.$store.getters.getAllNotes;
-      localStorage.setItem('notes', JSON.stringify(notes));
+    allNotes() {
+      const localNotes = JSON.parse(localStorage.getItem('notes'));
+      console.log('localNotes', localNotes)
+      if (localNotes) {
+        this.$store.dispatch('setLocalNotes', localNotes);
+      }
+      // localStorage.setItem('notes', JSON.stringify(notes));
     },
     //добавление новой Ноты в массив Нот
     handleSubmit({ title, activeTags }) {
@@ -89,6 +93,9 @@ export default {
       };
       this.$store.dispatch('setNote', note);
       // return note;
+    },
+    handleRemove(index) {
+      this.notes.splice(index, 1);
     },
     //получаем Ноты из Локалсторедж
     // getNotes() {
@@ -107,6 +114,8 @@ export default {
     notes: {
       handler(upgradeList) {
         localStorage.setItem('notes', JSON.stringify(upgradeList));
+        console.log('Note changed - localstorage')
+
       },
       //чтобы отслеживать изменения во вложенных свойствах массива notes
       deep: true,

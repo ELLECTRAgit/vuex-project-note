@@ -38,6 +38,11 @@ export const store = createStore({
   mutations: {
     setNote(state, note) {
       state.notes.push(note);
+      console.log('Note changed - mutations')
+
+    },
+    setLocalNotes (state, notes) {
+      state.notes = notes;
     },
     //-----------
     setUser(state, fakeUser) {
@@ -48,6 +53,10 @@ export const store = createStore({
   actions: {
     setNote({commit}, note) {
       commit('setNote', note);
+      console.log('Note changed - actions')
+    },
+    setLocalNotes({commit}, notes) {
+      commit ('setLocalNotes', notes);
     },
     //-------------
     setUser(context) {
