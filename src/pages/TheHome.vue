@@ -37,6 +37,7 @@
 <script>
 import Form from '@/components/Notes/NotesForm';
 import List from '@/components/Notes/NotesList';
+import { watchNotes } from '../components/utils/utils';
 export default {
   data() {
     return {
@@ -79,7 +80,7 @@ export default {
   methods: {
     allNotes() {
       const localNotes = JSON.parse(localStorage.getItem('notes'));
-      console.log('localNotes', localNotes)
+      console.log('localNotes', localNotes);
       if (localNotes) {
         this.$store.dispatch('setLocalNotes', localNotes);
       }
@@ -113,9 +114,9 @@ export default {
     //следим за Нотами и отправляем Ноты в Локалсторедж
     notes: {
       handler(upgradeList) {
-        localStorage.setItem('notes', JSON.stringify(upgradeList));
-        console.log('Note changed - localstorage')
-
+        watchNotes(upgradeList);
+        // localStorage.setItem('notes', JSON.stringify(upgradeList));
+        // console.log('Note changed - localstorage')
       },
       //чтобы отслеживать изменения во вложенных свойствах массива notes
       deep: true,
